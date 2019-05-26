@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "lib": [
+      "es2017",
+      "dom",
+    ],
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "strictNullChecks": true,
+    // "noUnusedLocals": true,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "noUnusedParameters": false,
+    "outDir": "dist",
+    "sourceMap": true,
+    "noImplicitThis": true,
+    "target": "es2017",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "compileOnSave": true,
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules/"
+  ]
+}
