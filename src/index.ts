@@ -2,7 +2,7 @@ import * as BABYLON from 'babylonjs';
 import 'babylonjs-loaders';
 
 import setupCameraAndControls from './Interaction/Camera';
-import { generateTerrain } from './TerrainGenerator';
+import { generateTerrain, generateTerrainTiles } from './TerrainGenerator';
 import { Vector3 } from 'babylonjs';
 
 // Get the canvas DOM element
@@ -17,18 +17,23 @@ var createScene = function () {
     scene.clearColor = new BABYLON.Color4(1,1,1,1);
 
     // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-	const dirLight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-1, -2, -1), scene);
+    const hemiLight = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(.1, 1, 0), scene);
+    hemiLight.intensity = .7;
+	const dirLight = new BABYLON.DirectionalLight("dir01", new BABYLON.Vector3(-1, 0, -1), scene);
 	dirLight.position = new BABYLON.Vector3(20, 40, 20);
 
-    const terrain = generateTerrain(scene, 64);
+    const terrain = generateTerrain(scene, 128);
     terrain.position = new Vector3(-32, -20, 0);
     terrain.receiveShadows = true;
+    // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
+
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);
 
     // Shadows
     var shadowGenerator = new BABYLON.ShadowGenerator(2048, dirLight);
+	// shadowGenerator.getShadowMap().renderList.concat(terrainMeshes);
 	shadowGenerator.getShadowMap().renderList.push(terrain);
 	shadowGenerator.useBlurExponentialShadowMap = true;
     shadowGenerator.useKernelBlur = true;
