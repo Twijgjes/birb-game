@@ -1,9 +1,32 @@
-import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial } from "babylonjs";
+import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh } from "babylonjs";
 
 interface MeshData {
   vertices: Array<Vector3>;
   indices: Array<number>;
   colors: Array<number>;
+}
+
+export function generateFlowerBed(scene: Scene): Array<InstancedMesh> {
+  const flowers = new Array<InstancedMesh>();
+  const flower = generateFlower(scene);
+  const areaSize = 50;
+  const half = areaSize / 2;
+
+  for (let i = 0; i < 5000; i++) {
+    const fi = flower.createInstance("Flower" + i);
+    flower.position = new Vector3(
+      half - Math.random() * areaSize,
+      0,
+      half - Math.random() * areaSize,
+    );
+    flower.rotation = new Vector3(
+      Math.random() * Math.PI * .1,
+      Math.random() * Math.PI * 2,
+      0,
+    );
+    flowers.push(fi);
+  }
+  return flowers;
 }
 
 export function generateFlower(scene: Scene): Mesh {
