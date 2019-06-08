@@ -4,6 +4,7 @@ import 'babylonjs-loaders';
 import setupCameraAndControls from './Interaction/Camera';
 import { generateTerrain, generateTerrainTiles } from './TerrainGenerator';
 import { Vector3 } from 'babylonjs';
+import { generateFlower } from './FloraGenerator';
 
 // Get the canvas DOM element
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -27,6 +28,7 @@ var createScene = function () {
     terrain.receiveShadows = true;
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
 
+    generateFlower(scene);
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);
