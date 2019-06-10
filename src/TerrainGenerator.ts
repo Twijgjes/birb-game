@@ -4,7 +4,7 @@ export function generateTerrainTiles(scene: Scene, tileSize: number, tilesToASid
   const terrainMeshes = [];
   for (let x = 0; x < tilesToASide; x++) {
     for (let z = 0; z < tilesToASide; z++) {
-      const mesh = generateTerrain(scene, tileSize);
+      const mesh = generateTerrainMesh(scene, tileSize, generateHeightMap(tileSize));
       terrainMeshes.push(mesh);
       mesh.position = new Vector3(x * (tileSize - 1), 0, z * (tileSize - 1));
       mesh.receiveShadows = true;
@@ -13,22 +13,9 @@ export function generateTerrainTiles(scene: Scene, tileSize: number, tilesToASid
   return terrainMeshes;
 }
 
-export function generateTerrain(scene: Scene, size: number): Mesh {
+export function generateTerrainMesh(scene: Scene, size: number, heightMap: Array<Array<number>>): Mesh {
   console.info("Generating terrain");
-  const halfSize = size / 2;
-  let positions = generateHeightMap(size);
-  // Work the heightmap
-  console.info("Adding big hills");
-  for(let i = 0; i < (20 / 64) * size; i++) {
-    positions = addRandomHill(positions, size, 20, .5);
-  }
-  console.info("Adding smaller hills");
-  for(let i = 0; i < (100 / 64) * size; i++) {
-    positions = addRandomHill(positions, size, 3 + Math.random() * 6, .3);
-  }
-
-  console.info("Adding falloff");
-  positions = falloff(positions, halfSize - 15, halfSize - 2, new Vector2(halfSize, halfSize));
+  let positions = heightMap;
 
   // Turn it into a mesh
   console.info("Flattening vertices array");
@@ -73,7 +60,8 @@ export function generateTerrain(scene: Scene, size: number): Mesh {
   return mesh;
 }
 
-function generateHeightMap(size: number): Array<Array<number>> {
+export function generateHeightMap(size: number): Array<Array<number>> {
+  const halfSize = size / 2;
   let heightmap = new Array<Array<number>>();
   for (let x = 0; x < size; x++) {
     heightmap[x] = new Array<number>();
@@ -82,6 +70,18 @@ function generateHeightMap(size: number): Array<Array<number>> {
       heightmap[x][z] = y;
     }
   }
+  // Work the heightmap
+  console.info("Adding big hills");
+  for(let i = 0; i < (20 / 64) * size; i++) {
+    heightmap = addRandomHill(heightmap, size, 20, .5);
+  }
+  console.info("Adding smaller hills");
+  for(let i = 0; i < (100 / 64) * size; i++) {
+    heightmap = addRandomHill(heightmap, size, 3 + Math.random() * 6, .3);
+  }
+
+  console.info("Adding falloff");
+  heightmap = falloff(heightmap, halfSize - 15, halfSize - 2, new Vector2(halfSize, halfSize));
   return heightmap;
 }
 

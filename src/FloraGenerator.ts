@@ -1,4 +1,5 @@
 import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh } from "babylonjs";
+import { COLORS } from "./Constants/colors";
 
 interface MeshData {
   vertices: Array<Vector3>;
@@ -6,20 +7,54 @@ interface MeshData {
   colors: Array<number>;
 }
 
-export function generateFlowerBed(scene: Scene): Array<InstancedMesh> {
+const flowerTypes = new Array<Mesh>();
+// Better for performance to have one set of meshes for all flowerbeds
+function instantiateFlowerMeshes(scene: Scene) {
+  flowerTypes.push(generateFlower(scene, Color3.FromHexString(COLORS.ORANGE_YELLOW)));
+  flowerTypes.push(generateFlower(scene, Color3.FromHexString(COLORS.PINK)));
+  flowerTypes.push(generateFlower(scene, Color3.FromHexString(COLORS.SKY)));
+  flowerTypes.push(generateFlower(scene, Color3.FromHexString(COLORS.RED)));
+}
+
+export function placeFlowerBedsOnGround(scene: Scene, heightMap: Array<Array<number>>): Array<InstancedMesh> {
   const flowers = new Array<InstancedMesh>();
-  const flower = generateFlower(scene);
-  const areaSize = 50;
+  const max = heightMap.length;
+  for(let i = 0; i < 200; i++) {
+    const bedPos = new Vector3(
+      Math.floor(Math.random() * max),
+      0,
+      Math.floor(Math.random() * max),
+    );
+    bedPos.y = heightMap[bedPos.x][bedPos.z] - .1;
+    if (bedPos.y > 1) {
+      flowers.push(...generateFlowerBed(scene, bedPos));
+    } else {
+      i--;
+    }
+  }
+  return flowers;
+}
+
+export function generateFlowerBed(scene: Scene, pOff: Vector3): Array<InstancedMesh> {
+  const flowers = new Array<InstancedMesh>();
+  
+  if (flowerTypes.length === 0) {
+    instantiateFlowerMeshes(scene);
+  }
+  
+  const areaSize = 1;
   const half = areaSize / 2;
 
-  for (let i = 0; i < 5000; i++) {
-    const fi = flower.createInstance("Flower" + i);
-    flower.position = new Vector3(
+  for (let i = 0; i < 20; i++) {
+    const fti = Math.floor(Math.random() * flowerTypes.length);
+    const fi = flowerTypes[fti].createInstance("Flower" + i);
+    scene.addMesh(fi);
+    fi.position = pOff.add(new Vector3(
       half - Math.random() * areaSize,
       0,
       half - Math.random() * areaSize,
-    );
-    flower.rotation = new Vector3(
+    ));
+    fi.rotation = new Vector3(
       Math.random() * Math.PI * .1,
       Math.random() * Math.PI * 2,
       0,
@@ -29,9 +64,11 @@ export function generateFlowerBed(scene: Scene): Array<InstancedMesh> {
   return flowers;
 }
 
-export function generateFlower(scene: Scene): Mesh {
+export function generateFlower(scene: Scene, petalColor: Color3): Mesh {
   const stemColor = Color3.FromHexString("#b6d53c");
-  const petalColor = Color3.FromHexString("#f4b41b");
+  // ffaeb6 pinkish
+  // f47e1b orange-ish
+  // Reddish e6482e
 
   const md = {
     vertices: new Array<Vector3>(),

@@ -1,19 +1,31 @@
 {
-  "name": "birb-game",
+  "name": "webpack-demo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && http-server"
+    "build": "webpack",
+    "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./dist --inline --progress --config webpack.dev.config.js"
   },
-  "author": "Roan",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "babylonjs": "^4.0.3"
-  },
   "devDependencies": {
+    "@types/cannon": "^0.1.4",
     "ts-loader": "^6.0.1",
-    "typescript": "^3.4.5"
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "babylonjs": "^4.0.3",
+    "babylonjs-loaders": "^4.0.3",
+    "babylonjs-materials": "^4.0.3",
+    "cannon": "^0.6.2",
+    "lodash": "^4.17.11"
   }
 }
