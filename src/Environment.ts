@@ -1,4 +1,4 @@
-import { Scene, Engine, Color3, Mesh, HemisphericLight, Vector3, DirectionalLight, ShadowGenerator } from "babylonjs";
+import { Scene, Engine, Color3, Mesh, HemisphericLight, Vector3, DirectionalLight, ShadowGenerator, Animation } from "babylonjs";
 import { COLORS } from "./Constants/colors";
 import { GradientMaterial } from "babylonjs-materials";
 
@@ -22,15 +22,40 @@ export function setupEnvironment(engine: Engine): Scene {
   gradientMaterial.disableLighting = true;
   skySphere.material = gradientMaterial;
 
-
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-  const hemiLight = new HemisphericLight('light1', new Vector3(.1, 1, 0), scene);
-  hemiLight.intensity = .7;
-	const dirLight = new DirectionalLight("dir01", new Vector3(-1, 0, -1), scene);
-	dirLight.position = new Vector3(20, 40, 20);
-  
+  // const hemiLight = new HemisphericLight('light1', new Vector3(.1, 1, 0), scene);
+  // hemiLight.intensity = 1;
+	const dirLight = new DirectionalLight("dir01", new Vector3(.1, -1, 0), scene);
+  // dirLight.direction = Vector3.Left();
+	// dirLight.position = new Vector3(20, 40, 20);
+  const sunAnim = new Animation("sun", "direction", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CYCLE)
+  sunAnim.setKeys([
+    {
+      frame: 0,
+      value: new Vector3(.1, -1, 0),
+    },
+    {
+      frame: 25,
+      value: new Vector3(.1, .1, 1),
+    },
+    {
+      frame: 50,
+      value: new Vector3(.1, -1, 0),
+    },
+    // {
+    //   frame: 55,
+    //   value: Vector3.Left(),
+    // },
+    // {
+    //   frame: 100,
+    //   value: Vector3.Down(),
+    // },
+  ]);
+  dirLight.animations.push(sunAnim);
+  scene.beginAnimation(dirLight, 0, 50, true, .1);
+
   // Shadows
-  var shadowGenerator = new ShadowGenerator(2048, dirLight);
+  const shadowGenerator = new ShadowGenerator(2048, dirLight);
   shadowGenerator.useBlurExponentialShadowMap = true;
   shadowGenerator.useKernelBlur = true;
   shadowGenerator.blurKernel = 64;
