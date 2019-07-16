@@ -23,8 +23,8 @@ export function setupEnvironment(engine: Engine): Scene {
   skySphere.material = gradientMaterial;
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-  // const hemiLight = new HemisphericLight('light1', new Vector3(.1, 1, 0), scene);
-  // hemiLight.intensity = 1;
+  const hemiLight = new HemisphericLight('light1', new Vector3(.1, -1, 0), scene);
+  hemiLight.intensity = 1;
 	const dirLight = new DirectionalLight("dir01", new Vector3(.1, -1, 0), scene);
   // dirLight.direction = Vector3.Left();
 	// dirLight.position = new Vector3(20, 40, 20);
@@ -52,7 +52,7 @@ export function setupEnvironment(engine: Engine): Scene {
     // },
   ]);
   dirLight.animations.push(sunAnim);
-  scene.beginAnimation(dirLight, 0, 50, true, .1);
+  // scene.beginAnimation(dirLight, 0, 50, true, .1);
 
   // Shadows
   const shadowGenerator = new ShadowGenerator(2048, dirLight);

@@ -1,10 +1,12 @@
 import 'babylonjs-loaders';
 
 import setupCameraAndControls from './Interaction/Camera';
+// import CANNON from 'cannon';
 import { generateTerrainMesh, generateTerrainTiles, generateHeightMap } from './TerrainGenerator';
-import { Vector3, Engine, ShadowGenerator } from 'babylonjs';
+import { Vector3, Engine, ShadowGenerator, CannonJSPlugin } from 'babylonjs';
 import { generateFlowerBed, placeFlowerBedsOnGround } from './FloraGenerator';
 import { setupEnvironment } from './Environment';
+import { generateTree } from './TreeGenerator';
 
 // Get the canvas DOM element
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -14,6 +16,9 @@ var engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: tr
 // CreateScene function that creates and return the scene
 var createScene = function () {
     const scene = setupEnvironment(engine);
+    // const gravityVector = new Vector3(0,-9.81, 0);
+    // const physicsPlugin = new CannonJSPlugin();
+    // scene.enablePhysics(gravityVector, physicsPlugin);
 
     const heightMap = generateHeightMap(128);
     const terrain = generateTerrainMesh(scene, 128, heightMap);
@@ -22,6 +27,7 @@ var createScene = function () {
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
     placeFlowerBedsOnGround(scene, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
+    generateTree(scene);
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);

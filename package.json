@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./dist --inline --progress --config webpack.dev.config.js"
+    "dev": "webpack-dev-server --host 0.0.0.0 --content-base ./dist --inline --progress --config webpack.dev.config.js",
+    "deploy": "npm run build && firebase deploy"
   },
   "keywords": [],
   "author": "",
