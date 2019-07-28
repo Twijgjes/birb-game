@@ -27,7 +27,13 @@ var createScene = function () {
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
     placeFlowerBedsOnGround(scene, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
-    generateTree(scene);
+    for (let i = 0; i < 50; i++) {
+        generateTree(scene, new Vector3(
+            Math.random() * 100,
+            0, // 20 - Math.random() * 40,
+            Math.random() * 100,
+        ));
+    }
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);
