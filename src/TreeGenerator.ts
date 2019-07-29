@@ -25,6 +25,16 @@ interface BranchEndData extends BranchData {
   mesh: Mesh;
 }
 
+export function generateTreesInRadius(scene: Scene, center: Vector3, radius: number, amount: number) {
+  for (let i = 0; i < 50; i++) {
+      const distance = 10 + Math.random() * (radius - 10);
+      const arc = Math.random() * Math.PI * 2;
+      generateTree(scene, 
+        center.add(new Vector3(0, 0, distance).rotateByQuaternionToRef(Quaternion.FromEulerAngles(0,arc,0), new Vector3())),
+      );
+  }
+}
+
 export function generateTree(scene: Scene, position: Vector3) {
   const barkColor = Color3.FromHexString(COLORS.BROWN);
 

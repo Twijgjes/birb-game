@@ -6,7 +6,7 @@ import { generateTerrainMesh, generateTerrainTiles, generateHeightMap } from './
 import { Vector3, Engine, ShadowGenerator, CannonJSPlugin } from 'babylonjs';
 import { generateFlowerBed, placeFlowerBedsOnGround } from './FloraGenerator';
 import { setupEnvironment } from './Environment';
-import { generateTree } from './TreeGenerator';
+import { generateTreesInRadius } from './TreeGenerator';
 
 // Get the canvas DOM element
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -27,13 +27,7 @@ var createScene = function () {
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
     placeFlowerBedsOnGround(scene, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
-    for (let i = 0; i < 50; i++) {
-        generateTree(scene, new Vector3(
-            Math.random() * 100,
-            0, // 20 - Math.random() * 40,
-            Math.random() * 100,
-        ));
-    }
+    generateTreesInRadius(scene, new Vector3(64, 0, 64), 50, 50);
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);
