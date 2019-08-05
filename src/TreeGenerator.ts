@@ -37,14 +37,14 @@ export function generateTreesInRadius(scene: Scene, center: Vector3, radius: num
   for (let i = 0; i < amount; i++) {
       const distance = 10 + Math.random() * (radius - 10);
       const arc = Math.random() * Math.PI * 2;
-      treeOptions.position = center
+      const position = center
         .add(new Vector3(0, 0, distance)
           .rotateByQuaternionToRef(Quaternion
             .FromEulerAngles(0,arc,0), new Vector3()
       ));
       generateTree(
         scene,
-        treeOptions,
+        getRandomTreeOptions(position),
       );
   }
 }
@@ -56,6 +56,17 @@ interface TreeOptions {
   direction: Vector3;
   startSegments: number;
   recursions: number;
+}
+
+function getRandomTreeOptions(position: Vector3): TreeOptions {
+  return {
+    startLength: .7 + Math.random() * .6,
+    startWidth: .5 + Math.random(),
+    position: position,
+    direction: Vector3.Up(),
+    startSegments: 5,
+    recursions: Math.random() > .5 ? 4 : 5,
+  };
 }
 
 export function generateTree(scene: Scene, treeOptions: TreeOptions) {
