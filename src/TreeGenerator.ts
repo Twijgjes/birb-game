@@ -1,5 +1,6 @@
 import { Scene, Vector3, Color3, VertexData, StandardMaterial, Mesh, MeshBuilder, Quaternion, VertexBuffer, IndicesArray, FloatArray, ImageProcessingConfigurationDefines, Material } from "babylonjs";
 import { COLORS } from "./Constants/colors";
+import { prepMesh, addRandomRotation } from "./MeshGeneratorUtils";
 
 interface TreeData {
   branch: BranchEndData,
@@ -27,18 +28,18 @@ interface BranchEndData extends BranchData {
 
 export function generateTreesInRadius(scene: Scene, center: Vector3, radius: number, amount: number, heightMap: number[][]) {
   for (let i = 0; i < amount; i++) {
-      const distance = 10 + Math.random() * (radius - 10);
-      const arc = Math.random() * Math.PI * 2;
-      const position = center
-        .add(new Vector3(0, 0, distance)
-          .rotateByQuaternionToRef(Quaternion
-            .FromEulerAngles(0,arc,0), new Vector3()
-      ));
-      position.y = heightMap[Math.floor(position.x)][Math.floor(position.z)] -.5;
-      generateTree(
-        scene,
-        getRandomTreeOptions(position),
-      );
+    const distance = 10 + Math.random() * (radius - 10);
+    const arc = Math.random() * Math.PI * 2;
+    const position = center
+      .add(new Vector3(0, 0, distance)
+        .rotateByQuaternionToRef(Quaternion
+          .FromEulerAngles(0,arc,0), new Vector3()
+    ));
+    position.y = heightMap[Math.floor(position.x)][Math.floor(position.z)] -.5;
+    generateTree(
+      scene,
+      getRandomTreeOptions(position),
+    );
   }
 }
 
@@ -85,7 +86,7 @@ export function generateTree(scene: Scene, treeOptions: TreeOptions) {
   }
   const meshes = [
     ...splitBranch(0, maxRecursions, tree, {material, barkColor}), 
-    prepMesh(firstBranch, barkColor, material)
+    prepMesh(firstBranch.mesh, barkColor, material)
   ];
   const treeMesh = Mesh.MergeMeshes(meshes, true, false);
   return treeMesh;
@@ -119,8 +120,8 @@ function splitBranch(recursions: number, max: number, treeData: TreeData, meshOp
   recursions++;
   
   let meshes = [
-    prepMesh(treeData.splits[0].branch, meshOptions.barkColor, meshOptions.material),
-    prepMesh(treeData.splits[1].branch, meshOptions.barkColor, meshOptions.material),
+    prepMesh(treeData.splits[0].branch.mesh, meshOptions.barkColor, meshOptions.material),
+    prepMesh(treeData.splits[1].branch.mesh, meshOptions.barkColor, meshOptions.material),
   ];
 
   if (recursions < max) {
@@ -133,7 +134,7 @@ function splitBranch(recursions: number, max: number, treeData: TreeData, meshOp
   return meshes;
 }
 
-function generateBranch(
+export function generateBranch(
   options: BranchData,
 ): BranchEndData {
   let { length, width, position, direction, segments} = options;
@@ -165,7 +166,6 @@ function generateBranch(
   const tube = extrTube;
   const positions = [...tube.getVerticesData(BABYLON.VertexBuffer.PositionKind)];
   const indices = [...tube.getIndices()];
-  tube.dispose();
 
   const branchEndData = {
     mesh: tube,
@@ -178,41 +178,6 @@ function generateBranch(
     indices,
   };  
   return branchEndData;
-}
-
-function prepMesh(branchEndData: BranchEndData, barkColor: Color3, material: Material): Mesh {
-  const mesh: Mesh = new Mesh("tree");
-  const positions = branchEndData.positions;
-  const indices = branchEndData.indices;
-  const normals = Array<number>();
-  const colors = Array<number>();
-  // tube.getVerticesData(BABYLON.VertexBuffer.ColorKind);
-
-  const numOfColors = positions.length / 3;
-  // console.info(`NumOfColors: ${numOfColors}`);
-  for (let i = 0; i < numOfColors; i ++) {
-    colors.push(barkColor.r, barkColor.g, barkColor.b, 1);
-  }
-
-  const vertexData = new VertexData();
-  VertexData.ComputeNormals(
-    positions,
-    indices,
-    normals,
-  );
-  vertexData.positions = positions;
-  vertexData.colors = colors;
-  vertexData.indices = indices;
-  vertexData.normals = normals;
-  
-  vertexData.applyToMesh(mesh);
-
-  mesh.updateVerticesData(VertexBuffer.ColorKind, colors);
-  mesh.convertToFlatShadedMesh();
-  mesh.useVertexColors = true;
-  mesh.receiveShadows = true;
-  mesh.material = material;
-  return mesh;
 }
 
 const square = [
@@ -229,15 +194,4 @@ for(let i = 0; i < 6; i++) {
   hexagon.push(
     hexagon[i].rotateByQuaternionToRef(Quaternion.FromEulerAngles(0,0,Math.PI / 3), new Vector3())
   );
-}
-
-const addRandomRotation = (v: Vector3, range: number): Vector3 => {
-  const result = new Vector3();
-  const half = range / 2;
-  v.rotateByQuaternionToRef(Quaternion.FromEulerAngles(
-    half - Math.random() * range,
-    half - Math.random() * range,
-    half - Math.random() * range
-  ), result);
-  return result;
 }
