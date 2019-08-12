@@ -25,15 +25,7 @@ interface BranchEndData extends BranchData {
   indices: number[];
 }
 
-export function generateTreesInRadius(scene: Scene, center: Vector3, radius: number, amount: number) {
-  const treeOptions = {
-    startLength: 1,
-    startWidth: 1,
-    position: Vector3.Zero(),
-    direction: Vector3.Up(),
-    startSegments: 5,
-    recursions: 4,
-  };
+export function generateTreesInRadius(scene: Scene, center: Vector3, radius: number, amount: number, heightMap: number[][]) {
   for (let i = 0; i < amount; i++) {
       const distance = 10 + Math.random() * (radius - 10);
       const arc = Math.random() * Math.PI * 2;
@@ -42,6 +34,7 @@ export function generateTreesInRadius(scene: Scene, center: Vector3, radius: num
           .rotateByQuaternionToRef(Quaternion
             .FromEulerAngles(0,arc,0), new Vector3()
       ));
+      position.y = heightMap[Math.floor(position.x)][Math.floor(position.z)] -.5;
       generateTree(
         scene,
         getRandomTreeOptions(position),

@@ -20,14 +20,15 @@ var createScene = function () {
     // const physicsPlugin = new CannonJSPlugin();
     // scene.enablePhysics(gravityVector, physicsPlugin);
 
-    const heightMap = generateHeightMap(128);
-    const terrain = generateTerrainMesh(scene, 128, heightMap);
+    const size = 128;
+    const heightMap = generateHeightMap(size);
+    const terrain = generateTerrainMesh(scene, size, heightMap);
     // terrain.position = new Vector3(-32, -20, 0);
     terrain.receiveShadows = true;
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
     placeFlowerBedsOnGround(scene, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
-    generateTreesInRadius(scene, new Vector3(64, 0, 64), 50, 50);
+    generateTreesInRadius(scene, new Vector3(64, 0, 64), 50, 50, heightMap);
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);
