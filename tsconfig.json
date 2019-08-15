@@ -13,7 +13,11 @@
     "types": [
       "babylonjs",
       "babylonjs-loaders",
-      "babylonjs-materials",
+      "babylonjs-materials"
     ],
+    "typeRoots": [
+      "node_modules/@types", 
+      "custom_typings"
+    ]
   }
 }

@@ -23,6 +23,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "^17.4.0",
     "babylonjs": "^4.0.3",
     "babylonjs-loaders": "^4.0.3",
     "babylonjs-materials": "^4.0.3",

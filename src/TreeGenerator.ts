@@ -1,4 +1,4 @@
-import { Scene, Vector3, Color3, VertexData, StandardMaterial, Mesh, MeshBuilder, Quaternion, VertexBuffer, IndicesArray, FloatArray, ImageProcessingConfigurationDefines, Material } from "babylonjs";
+import { Scene, Vector3, Color3, StandardMaterial, Mesh, MeshBuilder, Quaternion } from "babylonjs";
 import { COLORS } from "./Constants/colors";
 import { prepMesh, addRandomRotation } from "./MeshGeneratorUtils";
 
@@ -66,7 +66,7 @@ function getRandomTreeOptions(position: Vector3): TreeOptions {
 export function generateTree(scene: Scene, treeOptions: TreeOptions) {
   const barkColor = Color3.FromHexString(COLORS.BROWN);
 
-  const material = new StandardMaterial("terrainMaterial", scene);
+  const material = new StandardMaterial("treeMaterial", scene);
   material.diffuseColor = Color3.White();
   material.specularColor = Color3.Black();
 

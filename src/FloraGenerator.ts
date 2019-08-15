@@ -60,7 +60,7 @@ export function generateFlowerBed(scene: Scene, pOff: Vector3): Array<InstancedM
 }
 
 export function generateFlower(scene: Scene, petalColor: Color3): Mesh {
-  const stemColor = Color3.FromHexString("#b6d53c");
+  const stemColor = Color3.FromHexString(COLORS.LIGHT_GREEN);
   // ffaeb6 pinkish
   // f47e1b orange-ish
   // Reddish e6482e
