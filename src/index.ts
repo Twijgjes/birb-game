@@ -10,6 +10,7 @@ import { generateTreesInRadius } from './TreeGenerator';
 import { generateBushesInRadius } from './BushGenerator';
 import { generateButterfly, generateButterflies } from './ButterflyGenerator';
 import TWEEN from '@tweenjs/tween.js';
+import { Updateables } from './Updateable';
 
 // Get the canvas DOM element
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -39,10 +40,13 @@ var createScene = function () {
     console.info("Bushes");
     generateBushesInRadius(scene, 54, center, 50, heightMap);
     console.info("Butterflies");
-    generateButterflies(scene, 200, center, 40);
+    generateButterflies(scene, 100, center, 40);
 
     // Camera and controls setup
-    const camera = setupCameraAndControls(canvas, scene);
+    // For normal use
+    const camera = setupCameraAndControls(canvas, scene, new Vector3(50, 5, 50));
+    // For dev
+    // const camera = setupCameraAndControls(canvas, scene, new Vector3(0, 5, -10));
 
     // Return the created scene
     return scene;
@@ -51,7 +55,10 @@ var createScene = function () {
 var scene = createScene();
 // run the render loop
 engine.runRenderLoop(function () {
+    const delta = engine.getDeltaTime();
+    // console.info(delta);
     TWEEN.update();
+    Updateables.getInstance().update(delta / 1000);
     scene.render();
 });
 // the canvas/window resize event handler

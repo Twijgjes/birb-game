@@ -119,7 +119,6 @@ function flyTo(node: TransformNode, fromVelocity?: Vector3) {
     .easing((TWEEN as any).Easing.Linear.None)
     .start()
     .onComplete(() => {
-      console.info("Done with anim!");
       flyTo(node, toVelocity);
     });
 }

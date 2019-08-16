@@ -127,7 +127,6 @@ export function generateFlower(scene: Scene, petalColor: Color3): Mesh {
   vertexData.applyToMesh(mesh);
   mesh.material = material;
   mesh.convertToFlatShadedMesh();
-  // mesh.receiveShadows = true;
 
   return mesh;
 }
