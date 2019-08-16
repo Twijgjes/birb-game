@@ -8,7 +8,7 @@ import { generateFlowerBed, placeFlowerBedsOnGround } from './FloraGenerator';
 import { setupEnvironment } from './Environment';
 import { generateTreesInRadius } from './TreeGenerator';
 import { generateBushesInRadius } from './BushGenerator';
-import { generateButterfly } from './ButterflyGenerator';
+import { generateButterfly, generateButterflies } from './ButterflyGenerator';
 import TWEEN from '@tweenjs/tween.js';
 
 // Get the canvas DOM element
@@ -29,11 +29,17 @@ var createScene = function () {
     // terrain.position = new Vector3(-32, -20, 0);
     terrain.receiveShadows = true;
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
+    const center = new Vector3(64, 0, 64);
+
+    console.info("Flowers");
     placeFlowerBedsOnGround(scene, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
-    generateTreesInRadius(scene, new Vector3(64, 0, 64), 50, 50, heightMap);
-    generateBushesInRadius(scene, 54, new Vector3(64, 0, 64), 50, heightMap);
-    generateButterfly(scene);
+    console.info("Trees");
+    generateTreesInRadius(scene, center, 50, 25, heightMap);
+    console.info("Bushes");
+    generateBushesInRadius(scene, 54, center, 50, heightMap);
+    console.info("Butterflies");
+    generateButterflies(scene, 200, center, 40);
 
     // Camera and controls setup
     const camera = setupCameraAndControls(canvas, scene);

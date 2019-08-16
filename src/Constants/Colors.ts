@@ -32,3 +32,16 @@ export const COLORS = {
   WEIRD_PURPLE:   "#827094",
   WEIRD_GREY:     "#4f546b",
 };
+
+const BrightColors = [
+  COLORS.SKY,
+  COLORS.LIGHT_GREEN,
+  COLORS.DARK_PINK,
+  COLORS.ORANGE_YELLOW,
+  COLORS.ORANGE,
+  COLORS.RED,
+]
+
+export function randomBrightColor(): string {
+  return BrightColors[Math.floor(Math.random() * BrightColors.length)];
+}

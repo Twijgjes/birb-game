@@ -1,4 +1,4 @@
-import { IndicesArray, FloatArray, VertexData, Color3, Scene, Mesh, StandardMaterial, Vector2, Material, Vector3 } from 'babylonjs';
+import { IndicesArray, FloatArray, VertexData, Color3, Scene, Mesh, StandardMaterial, Vector2, Material, Vector3, VertexBuffer } from 'babylonjs';
 
 export function generateTerrainTiles(scene: Scene, tileSize: number, tilesToASide: number): Array<Mesh> {
   const terrainMeshes = [];
@@ -18,18 +18,18 @@ export function generateTerrainMesh(scene: Scene, size: number, heightMap: Array
   let positions = heightMap;
 
   // Turn it into a mesh
-  console.info("Flattening vertices array");
+  // console.info("Flattening vertices array");
   const flatPositions = flatten(positions);
-  console.info("Calculating indices");
+  // console.info("Calculating indices");
   const indices = indicesForSize(size);
-  console.info("Adding colors");
+  // console.info("Adding colors");
   const colors = colorsForPositions(flatPositions);
 
-  console.info("Computing normals");
+  // console.info("Computing normals");
   const normals = new Array<number>();
   VertexData.ComputeNormals(flatPositions, indices, normals);
 
-  console.info("Creating and assigning vertexdata");  
+  // console.info("Creating and assigning vertexdata");  
   const vertexData = new VertexData();
   vertexData.positions = flatPositions;
   vertexData.indices = indices;
@@ -51,12 +51,16 @@ export function generateTerrainMesh(scene: Scene, size: number, heightMap: Array
   // material.pointsCloud = true;
   // material.pointSize = 30;
 
-  console.info("Creating mesh and applying vertexdata");
+  // console.info("Creating mesh and applying vertexdata");
   const mesh = new Mesh("terrain", scene);
   vertexData.applyToMesh(mesh);
-  mesh.material = material;
+  mesh.updateVerticesData(VertexBuffer.ColorKind, colors);
   mesh.convertToFlatShadedMesh();
+  mesh.useVertexColors = true;
+  mesh.receiveShadows = true;
+  mesh.material = material;
 
+  console.info("Done generating terrain");
   return mesh;
 }
 

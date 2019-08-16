@@ -1,17 +1,33 @@
-import { Scene, Vector3, Color3, VertexData, Mesh, VertexBuffer, StandardMaterial } from "babylonjs";
+import { Scene, Vector3, Color3, VertexData, Mesh, VertexBuffer, StandardMaterial, TransformNode, Quaternion } from "babylonjs";
 import { flattenVertices, addFace } from "./MeshGeneratorUtils";
-import { COLORS } from "./Constants/colors";
+import { COLORS, randomBrightColor } from "./Constants/colors";
 import TWEEN from '@tweenjs/tween.js';
 
-export function generateButterfly(scene: Scene) {
-  const rightWingMesh = createWing(scene);
-  const leftWingMesh = createWing(scene, true);
+export function generateButterflies(scene: Scene, amount: number, center: Vector3, distance: number) {
+  for(let i = 0; i < amount; i++) {
+    const node = generateButterfly(scene);
+    const arc = Math.random() * Math.PI * 2;
+    const position = center
+      .add(new Vector3(0, 0, distance * Math.random())
+        .rotateByQuaternionToRef(Quaternion
+          .FromEulerAngles(0,arc,0), new Vector3()
+    ));
+    node.position = position;
+    flyTo(node);
+  }
+}
+
+export function generateButterfly(scene: Scene): TransformNode {
+  const wingColor = Color3.FromHexString(randomBrightColor());
+  const rightWingMesh = createWing(scene, wingColor);
+  const leftWingMesh = createWing(scene, wingColor, true);
   rightWingMesh.position.y = 2;
   leftWingMesh.position.y = 2;
+  const wingSpeed = 100 + Math.random() * 100;
 
   rightWingMesh.rotation.z = - Math.PI / 4;
   const rTween = (new TWEEN.Tween(rightWingMesh.rotation) as any)
-    .to({ z: Math.PI / 4 }, 300)
+    .to({ z: Math.PI / 4 }, wingSpeed)
     .easing((TWEEN as any).Easing.Quadratic.InOut)
     .yoyo(true)
     .repeat(Infinity)
@@ -19,14 +35,20 @@ export function generateButterfly(scene: Scene) {
 
   leftWingMesh.rotation.z = Math.PI / 4;
   const lTween = (new TWEEN.Tween(leftWingMesh.rotation) as any)
-    .to({ z: - Math.PI / 4 }, 300)
+    .to({ z: - Math.PI / 4 }, wingSpeed)
     .easing((TWEEN as any).Easing.Quadratic.InOut) 
     .yoyo(true)
     .repeat(Infinity)
     .start();
+
+  // Make it fly somewhere
+  const parent = new TransformNode("butterflyParent");
+  rightWingMesh.parent = parent;
+  leftWingMesh.parent = parent;
+  return parent;
 }
 
-function createWing(scene: Scene, mirror = false): Mesh {
+function createWing(scene: Scene, wingColor: Color3, mirror = false): Mesh {
   const a = new Vector3(0, 0, 1);
   const b = new Vector3(1, 0, 1.2);
   const c = new Vector3(2, 0, 1);
@@ -41,7 +63,6 @@ function createWing(scene: Scene, mirror = false): Mesh {
     e.x *= -1;
     f.x *= -1;
   }
-  const wingColor = Color3.FromHexString(COLORS.ORANGE)
   const md = {
     vertices: new Array<Vector3>(),
     indices: new Array<number>(),
@@ -70,5 +91,35 @@ function createWing(scene: Scene, mirror = false): Mesh {
   material.specularColor = Color3.Black();
   material.backFaceCulling = false;
   mesh.material = material;
+  mesh.scaling = new Vector3(.1, .1, .1);
   return mesh;
+}
+
+function flyTo(node: TransformNode, fromVelocity?: Vector3) {
+  if (!fromVelocity) {
+    fromVelocity = new Vector3(
+      Math.random() - .5,
+      (Math.random() - .5) * .1, 
+      Math.random() - .5
+    ).normalize().scale(.01);
+  }
+  const toVelocity = new Vector3();
+  fromVelocity.clone().rotateByQuaternionToRef(Quaternion.FromEulerAngles(
+    0,
+    Math.random() * (Math.PI / 4),
+    0
+  ), toVelocity);
+  const target = (new TWEEN.Tween(fromVelocity) as any)
+    .to({x: toVelocity.x, y: toVelocity.y, z: toVelocity.z}, 10000)
+    .onUpdate(function() {
+      const newPos = node.position.add(fromVelocity);
+      node.lookAt(newPos);
+      node.position = newPos;
+    })
+    .easing((TWEEN as any).Easing.Linear.None)
+    .start()
+    .onComplete(() => {
+      console.info("Done with anim!");
+      flyTo(node, toVelocity);
+    });
 }
