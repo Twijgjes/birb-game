@@ -1,6 +1,7 @@
 import { Scene, Vector3, Color3, StandardMaterial, Mesh, MeshBuilder, Quaternion } from "babylonjs";
 import { COLORS } from "./Constants/colors";
 import { prepMesh, addRandomRotation } from "./Utils/MeshGeneratorUtils";
+import { Shadows } from "./Environment";
 
 interface TreeData {
   branch: BranchEndData,
@@ -89,6 +90,7 @@ export function generateTree(scene: Scene, treeOptions: TreeOptions) {
     prepMesh(firstBranch.mesh, barkColor, material)
   ];
   const treeMesh = Mesh.MergeMeshes(meshes, true, false);
+  Shadows.getInstance(scene).addShadowCaster(treeMesh);
   return treeMesh;
 }
 

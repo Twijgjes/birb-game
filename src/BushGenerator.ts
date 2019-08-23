@@ -2,6 +2,7 @@ import { Vector3, Quaternion, MeshBuilder, StandardMaterial, Color3, Scene, Mesh
 import { COLORS } from "./Constants/colors";
 import { prepMesh, addRandomRotation } from "./Utils/MeshGeneratorUtils";
 import { generateBranch } from "./TreeGenerator";
+import { Shadows } from "./Environment";
 
 export function generateBushesInRadius(scene: Scene, amount: number, center: Vector3, radius: number, heightMap: number[][]) {
   for (let i = 0; i < amount; i++) {
@@ -26,17 +27,6 @@ export function generateBush(scene: Scene, position: Vector3) {
   const material = new StandardMaterial("bushMaterial", scene);
   material.diffuseColor = Color3.White();
   material.specularColor = Color3.Black();
-  // const sphere = MeshBuilder.CreateSphere("sphere", {
-  //   diameter: 1,
-  //   segments: 8,
-  //   // slice: .5,
-  // });
-  // const sphere = MeshBuilder.CreateIcoSphere("bushy", {
-  //   radius: .5,
-  //   subdivisions: 1,
-  // });
-  // sphere.position = position;
-  // prepMesh(sphere, bushColor, material);
   
   const baseBranch = generateBranch({
     direction: Vector3.Up(),
@@ -68,12 +58,10 @@ export function generateBush(scene: Scene, position: Vector3) {
       Math.random() * (Math.PI * 2),
       Math.random() * (Math.PI * 2)
     );
-    prepMesh(bush, bushColor, material);
-
+    meshes.push(prepMesh(bush, bushColor, material));
     // TODO: find out how these can also be merged
   }
-  // Mesh.MergeMeshes(meshes);
-
-  // const mesh = Mesh.MergeMeshes(meshes, true, false);
-  // scene.addMesh(mesh);
+  const bushMesh = Mesh.MergeMeshes(meshes, true);
+  Shadows.getInstance(scene).addShadowCaster(bushMesh);
+  scene.addMesh(bushMesh);
 }

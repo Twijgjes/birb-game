@@ -29,8 +29,7 @@ export function setupEnvironment(engine: Engine): Scene {
   const hemiLightDown = new HemisphericLight('light2', new Vector3(0, -1, 0), scene);
   hemiLightDown.intensity = .5;
 	// const dirLight = new DirectionalLight("dir01", new Vector3(.1, -1, 0), scene);
-  const d1 = new DirectionalLight("dir", new Vector3(1, -1, -2), scene);
-  d1.position = new Vector3(-300,300,600);
+  
   // dirLight.direction = Vector3.Left();
 	// dirLight.position = new Vector3(20, 40, 20);
   const sunAnim = new Animation("sun", "direction", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CYCLE)
@@ -60,10 +59,30 @@ export function setupEnvironment(engine: Engine): Scene {
   // scene.beginAnimation(dirLight, 0, 50, true, .1);
 
   // Shadows
-  const shadowGenerator = new ShadowGenerator(2048, d1);
-  shadowGenerator.useBlurExponentialShadowMap = true;
-  shadowGenerator.useKernelBlur = true;
-  shadowGenerator.blurKernel = 64;
+  Shadows.getInstance(scene);
 
   return scene;
+}
+
+export class Shadows {
+  private static shadowGenerator: ShadowGenerator;
+  private static instance: Shadows;
+
+  private constructor(scene: Scene) {
+    const d1 = new DirectionalLight("dir", new Vector3(1, -1, -2), scene);
+    d1.position = new Vector3(-300,600,600);
+    Shadows.shadowGenerator = new ShadowGenerator(2048, d1);
+    Shadows.shadowGenerator.useBlurExponentialShadowMap = true;
+  }
+
+  static getInstance(scene: Scene) {
+    if(!Shadows.instance) {
+      Shadows.instance = new Shadows(scene);
+    }
+    return Shadows.instance;
+  }
+
+  addShadowCaster(mesh: Mesh) {
+    Shadows.shadowGenerator.getShadowMap().renderList.push(mesh);
+  }
 }
