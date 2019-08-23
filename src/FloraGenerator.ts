@@ -1,6 +1,6 @@
 import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh } from "babylonjs";
 import { COLORS } from "./Constants/colors";
-import { flattenVertices, addFace } from "./MeshGeneratorUtils";
+import { flattenVertices, addFace } from "./Utils/MeshGeneratorUtils";
 
 const flowerTypes = new Array<Mesh>();
 // Better for performance to have one set of meshes for all flowerbeds
@@ -54,6 +54,7 @@ export function generateFlowerBed(scene: Scene, pOff: Vector3): Array<InstancedM
       Math.random() * Math.PI * 2,
       0,
     );
+    fi.scaling = new Vector3(1.5, 1.5, 1.5);
     flowers.push(fi);
   }
   return flowers;

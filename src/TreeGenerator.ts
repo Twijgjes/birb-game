@@ -1,6 +1,6 @@
 import { Scene, Vector3, Color3, StandardMaterial, Mesh, MeshBuilder, Quaternion } from "babylonjs";
 import { COLORS } from "./Constants/colors";
-import { prepMesh, addRandomRotation } from "./MeshGeneratorUtils";
+import { prepMesh, addRandomRotation } from "./Utils/MeshGeneratorUtils";
 
 interface TreeData {
   branch: BranchEndData,

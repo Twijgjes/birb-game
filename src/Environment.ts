@@ -23,9 +23,14 @@ export function setupEnvironment(engine: Engine): Scene {
   skySphere.material = gradientMaterial;
 
   // Create a basic light, aiming 0, 1, 0 - meaning, to the sky
-  const hemiLight = new HemisphericLight('light1', new Vector3(.1, -1, 0), scene);
-  hemiLight.intensity = 1;
-	const dirLight = new DirectionalLight("dir01", new Vector3(.1, -1, 0), scene);
+  const hemiLightUp = new HemisphericLight('light1', new Vector3(0, 1, 0), scene);
+  hemiLightUp.intensity = .5;
+
+  const hemiLightDown = new HemisphericLight('light2', new Vector3(0, -1, 0), scene);
+  hemiLightDown.intensity = .5;
+	// const dirLight = new DirectionalLight("dir01", new Vector3(.1, -1, 0), scene);
+  const d1 = new DirectionalLight("dir", new Vector3(1, -1, -2), scene);
+  d1.position = new Vector3(-300,300,600);
   // dirLight.direction = Vector3.Left();
 	// dirLight.position = new Vector3(20, 40, 20);
   const sunAnim = new Animation("sun", "direction", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CYCLE)
@@ -51,11 +56,11 @@ export function setupEnvironment(engine: Engine): Scene {
     //   value: Vector3.Down(),
     // },
   ]);
-  dirLight.animations.push(sunAnim);
+  // dirLight.animations.push(sunAnim);
   // scene.beginAnimation(dirLight, 0, 50, true, .1);
 
   // Shadows
-  const shadowGenerator = new ShadowGenerator(2048, dirLight);
+  const shadowGenerator = new ShadowGenerator(2048, d1);
   shadowGenerator.useBlurExponentialShadowMap = true;
   shadowGenerator.useKernelBlur = true;
   shadowGenerator.blurKernel = 64;

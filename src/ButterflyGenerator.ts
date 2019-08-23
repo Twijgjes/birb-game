@@ -1,5 +1,5 @@
 import { Scene, Vector3, Color3, VertexData, Mesh, VertexBuffer, StandardMaterial, TransformNode, Quaternion } from "babylonjs";
-import { flattenVertices, addFace } from "./MeshGeneratorUtils";
+import { flattenVertices, addFace } from "./Utils/MeshGeneratorUtils";
 import { COLORS, randomBrightColor } from "./Constants/colors";
 import TWEEN from '@tweenjs/tween.js';
 

@@ -1,12 +1,11 @@
 import * as BABYLON from 'babylonjs';
-import { Vector3, FreeCamera } from 'babylonjs';
-import { Updateable } from '../Updateable';
+import { Vector3, FreeCamera, Scene, Engine } from 'babylonjs';
+import { Updateable } from '../Utils/Updateable';
 
-export default function setupCameraAndControls(canvas: HTMLCanvasElement, scene: BABYLON.Scene, startPosition: Vector3) {
+export default function setupCameraAndControls(canvas: HTMLCanvasElement, scene: Scene, engine: Engine, startPosition: Vector3) {
   // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
   var camera = new BABYLON.FreeCamera('camera1', startPosition, scene);
   // Target the camera to scene origin
-  camera.setTarget(BABYLON.Vector3.Zero());
   // Attach the camera to the canvas
   camera.attachControl(canvas, false);
   camera.keysUp.push(87);    //W
@@ -17,6 +16,12 @@ export default function setupCameraAndControls(canvas: HTMLCanvasElement, scene:
 
   camera.inputs.addDeviceOrientation();
   camera.speed = .5;
+  camera.setTarget(new Vector3(0, 0, 0));
+
+  // engine.enterFullscreen(false);
+
+  // navigator.permissions.query({name: "accelerometer"});
+  // navigator.permissions.query({name: "gyroscope"});
 
   // if (isMobileDevice()) {
   //   alert("Removing mouse controls");

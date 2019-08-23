@@ -1,6 +1,6 @@
 import { Vector3, Quaternion, MeshBuilder, StandardMaterial, Color3, Scene, Mesh } from "babylonjs";
 import { COLORS } from "./Constants/colors";
-import { prepMesh, addRandomRotation } from "./MeshGeneratorUtils";
+import { prepMesh, addRandomRotation } from "./Utils/MeshGeneratorUtils";
 import { generateBranch } from "./TreeGenerator";
 
 export function generateBushesInRadius(scene: Scene, amount: number, center: Vector3, radius: number, heightMap: number[][]) {

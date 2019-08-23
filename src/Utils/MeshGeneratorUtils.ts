@@ -1,5 +1,5 @@
 import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh, Material, VertexBuffer, Quaternion } from "babylonjs";
-import { COLORS } from "./Constants/colors";
+import { COLORS } from "../Constants/colors";
 
 export interface MeshData {
   vertices: Array<Vector3>;

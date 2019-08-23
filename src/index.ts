@@ -10,7 +10,9 @@ import { generateTreesInRadius } from './TreeGenerator';
 import { generateBushesInRadius } from './BushGenerator';
 import { generateButterfly, generateButterflies } from './ButterflyGenerator';
 import TWEEN from '@tweenjs/tween.js';
-import { Updateables } from './Updateable';
+import { Updateables } from './Utils/Updateable';
+import { initUI } from './Interaction/UI';
+import { makeSea } from './Sea';
 
 // Get the canvas DOM element
 var canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
@@ -41,24 +43,34 @@ var createScene = function () {
     generateBushesInRadius(scene, 54, center, 50, heightMap);
     console.info("Butterflies");
     generateButterflies(scene, 100, center, 40);
+    console.info("Sea");
+    makeSea(scene, size * 1.5, center.add(new Vector3(0, .5, 0)));
+    console.info("UI");
+    initUI(engine);
+
 
     // Camera and controls setup
     // For normal use
-    const camera = setupCameraAndControls(canvas, scene, new Vector3(50, 5, 50));
+    // const camera = setupCameraAndControls(canvas, scene, engine, new Vector3(50, 5, 50));
     // For dev
-    // const camera = setupCameraAndControls(canvas, scene, new Vector3(0, 5, -10));
+    const camera = setupCameraAndControls(canvas, scene, engine, new Vector3(0, 5, -10));
 
     // Return the created scene
     return scene;
 }
 // call the createScene function
 var scene = createScene();
-// run the render loop
-engine.runRenderLoop(function () {
+
+scene.beforeRender = function() {
     const delta = engine.getDeltaTime();
     // console.info(delta);
     TWEEN.update();
     Updateables.getInstance().update(delta / 1000);
+}
+
+// run the render loop
+engine.runRenderLoop(function () {
+    
     scene.render();
 });
 // the canvas/window resize event handler

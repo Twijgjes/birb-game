@@ -43,13 +43,6 @@ export function generateTerrainMesh(scene: Scene, size: number, heightMap: Array
   // https://lospec.com/palette-list/zughy-32
   material.diffuseColor = Color3.White();
   material.specularColor = Color3.Black();
-  // material.roughness = -10;
-  // material.
-  // material.specularPower = 1;
-  // console.info(material);
-  // material.diffuseColor = new Color3(.5, .5, .5);
-  // material.pointsCloud = true;
-  // material.pointSize = 30;
 
   // console.info("Creating mesh and applying vertexdata");
   const mesh = new Mesh("terrain", scene);
