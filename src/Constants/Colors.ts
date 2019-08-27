@@ -25,6 +25,7 @@ export const COLORS = {
   PURPLE:         "#8e478c",
   DARK_PINK:      "#cd6093",
   PINK:           "#ffaeb6",
+  YELLOW:         "#f4d01b",
   ORANGE_YELLOW:  "#f4b41b",
   ORANGE:         "#f47e1b",
   RED:            "#e6482e",

@@ -1,10 +1,9 @@
-import { Scene, Engine, Color3, Mesh, HemisphericLight, Vector3, DirectionalLight, ShadowGenerator, Animation } from "babylonjs";
+import { Scene, Engine, Color3, Mesh, HemisphericLight, Vector3, DirectionalLight, ShadowGenerator, Animation, MeshBuilder, StandardMaterial } from "babylonjs";
 import { COLORS } from "./Constants/colors";
 import { GradientMaterial } from "babylonjs-materials";
+import TWEEN from '@tweenjs/tween.js';
 
-export function setupEnvironment(engine: Engine): Scene {
-  // Create a basic BJS Scene object
-  const scene = new Scene(engine);
+export function setupEnvironment(scene: Scene, engine: Engine) {
   scene.clearColor = Color3.FromHexString(COLORS.SKY).toColor4(1);
   scene.fogMode = Scene.FOGMODE_EXP;
   scene.fogDensity = 0.01;
@@ -60,8 +59,30 @@ export function setupEnvironment(engine: Engine): Scene {
 
   // Shadows
   Shadows.getInstance(scene);
+}
 
-  return scene;
+export function igniteSun(scene: Scene, position: Vector3) {
+  const material = new StandardMaterial("sunMaterial", scene);
+  material.diffuseColor = Color3.FromHexString(COLORS.YELLOW);
+  material.specularColor = Color3.Black();
+  material.emissiveColor = Color3.FromHexString(COLORS.YELLOW);
+  const sun = MeshBuilder.CreateIcoSphere("Sunny", {
+    radius: 40,
+    subdivisions: 2,
+  });
+  // material.disableLighting = true;
+  sun.material = material;
+  sun.position = position;
+  sun.position = new Vector3(-150,300,300);
+  sun.infiniteDistance = true;
+  // sun.render
+  sun.applyFog = false;
+  (new TWEEN.Tween(sun.rotation) as any)
+    .to({x: Math.PI * 6, y: Math.PI * 4, z: Math.PI * 2}, 100000)
+    .yoyo(true)
+    .repeat(Infinity)
+    .easing((TWEEN as any).Easing.Quadratic.InOut)
+    .start();
 }
 
 export class Shadows {
@@ -71,6 +92,7 @@ export class Shadows {
   private constructor(scene: Scene) {
     const d1 = new DirectionalLight("dir", new Vector3(1, -1, -2), scene);
     d1.position = new Vector3(-300,600,600);
+    igniteSun(scene, d1.position);
     Shadows.shadowGenerator = new ShadowGenerator(2048, d1);
     Shadows.shadowGenerator.useBlurExponentialShadowMap = true;
   }
