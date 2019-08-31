@@ -7,7 +7,6 @@ import { generateTreesInRadius } from "../TreeGenerator";
 import { generateBushesInRadius } from "../BushGenerator";
 import { generateButterflies } from "../ButterflyGenerator";
 import { makeSea } from "../Sea";
-import { initUI } from "../Interaction/UI";
 import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
 import Game from "../Game";
