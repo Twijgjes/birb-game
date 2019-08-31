@@ -1,37 +1,24 @@
 import 'babylonjs-loaders';
-
-import { Engine, Scene } from 'babylonjs';
-import TWEEN from '@tweenjs/tween.js';
-import { Updateables } from './Utils/Updateable';
 import setupDemoScene from './Scenes/DemoScene';
+import { initChooseSceneUI } from './Interaction/UI';
+import Game from './Game';
+import setupZenScene from './Scenes/ZenScene';
 
-let canvas: HTMLCanvasElement, 
-    engine: Engine, 
-    scene: Scene;
+// Make sure this is the first thing we do.
+Game.getInstance();
 
-function init() {
-    // Get the canvas DOM element
-    canvas = document.getElementById('renderCanvas') as HTMLCanvasElement;
-    engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-    // Create a basic BJS Scene object
-    scene = new Scene(engine);
-    scene.beforeRender = function() {
-        const delta = engine.getDeltaTime();
-        TWEEN.update();
-        Updateables.getInstance().update(delta / 1000);
-    }
+initChooseSceneUI();
 
-    // run the render loop
-    engine.runRenderLoop(function () {
-        scene.render();
-    });
-    // the canvas/window resize event handler
-    window.addEventListener('resize', function () {
-        engine.resize();
-    });
+const params = new URLSearchParams(window.location.search);
+const selectedScene = params.get("scene");
+switch(selectedScene) {
+    case "demo":
+        setupDemoScene();
+        break;
+    case "zen":
+        setupZenScene();
+        break;
+    default:
+        setupDemoScene();
 }
-
-// call the createScene function
-init();
-setupDemoScene(scene, engine, canvas);
 

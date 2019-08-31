@@ -10,16 +10,26 @@ import { makeSea } from "../Sea";
 import { initUI } from "../Interaction/UI";
 import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
+import Game from "../Game";
 
-export default function setupZenScene(scene: Scene, engine: Engine, canvas: HTMLCanvasElement) {
-  // Setup UI with buttons & sliders
-
-  // Add buttton to re-generate the world
+export default function setupZenScene() {
+  const { scene, engine, canvas } = Game;
   regenerateWorld(scene, engine, canvas, {
     size: 128,
     center: 128 / 2,
     amountOfBushes: 54,
   });
+
+  // Setup UI with buttons & sliders
+  
+
+  // Add buttton to re-generate the world
+  // Game.resetScene();
+  // regenerateWorld(scene, engine, canvas, {
+  //   size: 128,
+  //   center: 128 / 2,
+  //   amountOfBushes: 54,
+  // });
 }
 
 interface WorldOptions {
@@ -29,7 +39,6 @@ interface WorldOptions {
 }
 
 function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement, options: WorldOptions) {
-  // Empty/recreate entire scene
   // Setup
   setupEnvironment(scene, engine);
 
@@ -50,8 +59,6 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
   generateButterflies(scene, 100, center, 40);
   console.info("Sea");
   makeSea(scene, options.size * 1.5, center.add(new Vector3(0, .5, 0)));
-  console.info("UI");
-  initUI(engine);
 
   // Camera and controls setup
   // For normal use

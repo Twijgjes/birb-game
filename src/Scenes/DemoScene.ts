@@ -8,9 +8,11 @@ import { generateButterflies } from "../ButterflyGenerator";
 import { makeSea } from "../Sea";
 import { initUI } from "../Interaction/UI";
 import setupCameraAndControls from "../Interaction/Camera";
+import Game from '../Game';
 
 // CreateScene function that creates and return the scene
-export default function setupDemoScene (scene: Scene, engine: Engine, canvas: HTMLCanvasElement) {
+export default function setupDemoScene () {
+    const { scene, engine, canvas } = Game;
     setupEnvironment(scene, engine);
 
     const size = 128;
@@ -31,8 +33,6 @@ export default function setupDemoScene (scene: Scene, engine: Engine, canvas: HT
     generateButterflies(scene, 100, center, 40);
     console.info("Sea");
     makeSea(scene, size * 1.5, center.add(new Vector3(0, .5, 0)));
-    console.info("UI");
-    initUI(engine);
 
     // Camera and controls setup
     // For normal use

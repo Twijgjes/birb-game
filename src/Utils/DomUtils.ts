@@ -1,5 +1,9 @@
-export function createEl(className: string, parent?: HTMLElement) {
-  const el = window.document.createElement("div");
+export function createEl(
+  className: string,
+  tagName: string = "div",
+  parent?: HTMLElement
+) {
+  const el = window.document.createElement(tagName);
   el.className = className;
   if (parent) {
     parent.appendChild(el);
