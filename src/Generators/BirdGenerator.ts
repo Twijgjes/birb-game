@@ -21,6 +21,7 @@ export function generateAutonomousBirds(scene: Scene, amount: number, center: Ve
 export function generateAutonomousBird(scene: Scene, position: Vector3) {
   const bird = generateBird(scene, position);
   bird.position.y += Math.random() * 5;
+  bird.scaling.scale(1 + Math.random());
   flyTo(bird, {speed: .05});
 }
 

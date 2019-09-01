@@ -10,6 +10,7 @@ import { makeSea } from "../Generators/Sea";
 import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
 import Game from "../Game";
+import { generateAutonomousBirds } from "../Generators/BirdGenerator";
 
 export default function setupZenScene(gui: dat.GUI) {
   const { scene, engine, canvas } = Game;
@@ -18,20 +19,24 @@ export default function setupZenScene(gui: dat.GUI) {
     size,
     center: size / 2,
     bushes: {
-      amount: 3,
+      amount: 8,
       radius: 6,
     },
     butterflies: {
-      amount: 20,
+      amount: 16,
       radius: 10,
     },
     trees: {
-      amount: 1,
+      amount: 2,
       radius: 2,
     },
     flowersbeds: {
-      amount: 10,
-    }
+      amount: 16,
+    },
+    birds: {
+      amount: 8,
+      radius: 10,
+    },
   };
   // setupOptionsUI(gui, worldOptions);
   regenerateWorld(scene, engine, canvas, worldOptions);
@@ -54,6 +59,10 @@ interface WorldOptions {
   },
   flowersbeds: {
     amount: number;
+  },
+  birds: {
+    amount: number;
+    radius: number;
   }
 }
 
@@ -76,6 +85,9 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
 
   console.info("Flowers");
   placeFlowerBedsOnGround(scene, options.flowersbeds.amount, heightMap);
+
+  console.info("Bird!");
+  generateAutonomousBirds(scene, options.birds.amount, vCenter.add(new Vector3(0, 5, 0)), options.birds.radius);
 
   console.info("Trees");
   generateTreesInRadius(scene, 
