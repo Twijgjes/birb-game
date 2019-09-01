@@ -1,8 +1,8 @@
 import { Vector3, Quaternion, MeshBuilder, StandardMaterial, Color3, Scene, Mesh } from "babylonjs";
-import { COLORS } from "./Constants/colors";
-import { prepMesh, addRandomRotation } from "./Utils/MeshGeneratorUtils";
+import { COLORS } from "../Constants/colors";
+import { prepMesh, addRandomRotation } from "../Utils/MeshGeneratorUtils";
 import { generateBranch } from "./TreeGenerator";
-import { Shadows } from "./Environment";
+import { Shadows } from "../Environment";
 
 export function generateBushesInRadius(scene: Scene, amount: number, center: Vector3, radius: number, heightMap: number[][]) {
   for (let i = 0; i < amount; i++) {
@@ -27,6 +27,7 @@ export function generateBush(scene: Scene, position: Vector3) {
   const material = new StandardMaterial("bushMaterial", scene);
   material.diffuseColor = Color3.White();
   material.specularColor = Color3.Black();
+  material.backFaceCulling = false;
   
   const baseBranch = generateBranch({
     direction: Vector3.Up(),

@@ -1,6 +1,6 @@
 import { Scene, Vector3, Color3, VertexData, Mesh, VertexBuffer, StandardMaterial, TransformNode, Quaternion } from "babylonjs";
-import { flattenVertices, addFace } from "./Utils/MeshGeneratorUtils";
-import { COLORS, randomBrightColor } from "./Constants/colors";
+import { flattenVertices, addFace } from "../Utils/MeshGeneratorUtils";
+import { COLORS, randomBrightColor } from "../Constants/colors";
 import TWEEN from '@tweenjs/tween.js';
 
 export function generateButterflies(scene: Scene, amount: number, center: Vector3, distance: number) {
@@ -8,7 +8,7 @@ export function generateButterflies(scene: Scene, amount: number, center: Vector
     const node = generateButterfly(scene);
     const arc = Math.random() * Math.PI * 2;
     const position = center
-      .add(new Vector3(0, 0, distance * Math.random())
+      .add(new Vector3(0, 2, distance * Math.random())
         .rotateByQuaternionToRef(Quaternion
           .FromEulerAngles(0,arc,0), new Vector3()
     ));

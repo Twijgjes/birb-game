@@ -57,7 +57,13 @@ export function generateTerrainMesh(scene: Scene, size: number, heightMap: Array
   return mesh;
 }
 
-export function generateHeightMap(size: number): Array<Array<number>> {
+export function generateHeightMap(
+  size: number,
+  smallHills: number = (20 / 64) * size,
+  bigHills: number = (100 / 64) * size,
+  falloffStartRadius: number = (size / 2) - 15,
+  falloffEndRadius: number = (size / 2) - 2,
+): Array<Array<number>> {
   const halfSize = size / 2;
   let heightmap = new Array<Array<number>>();
   for (let x = 0; x < size; x++) {
@@ -69,16 +75,16 @@ export function generateHeightMap(size: number): Array<Array<number>> {
   }
   // Work the heightmap
   console.info("Adding big hills");
-  for(let i = 0; i < (20 / 64) * size; i++) {
+  for(let i = 0; i < smallHills; i++) {
     heightmap = addRandomHill(heightmap, size, 20, .5);
   }
   console.info("Adding smaller hills");
-  for(let i = 0; i < (100 / 64) * size; i++) {
+  for(let i = 0; i < bigHills; i++) {
     heightmap = addRandomHill(heightmap, size, 3 + Math.random() * 6, .3);
   }
 
   console.info("Adding falloff");
-  heightmap = falloff(heightmap, halfSize - 15, halfSize - 2, new Vector2(halfSize, halfSize));
+  heightmap = falloff(heightmap, falloffStartRadius, falloffEndRadius, new Vector2(halfSize, halfSize));
   return heightmap;
 }
 

@@ -1,6 +1,6 @@
-import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh } from "babylonjs";
-import { COLORS } from "./Constants/colors";
-import { flattenVertices, addFace } from "./Utils/MeshGeneratorUtils";
+import { Mesh, Scene, Vector3, Color3, VertexData, StandardMaterial, InstancedMesh } from "babylonjs";
+import { COLORS } from "../Constants/colors";
+import { flattenVertices, addFace } from "../Utils/MeshGeneratorUtils";
 
 const flowerTypes = new Array<Mesh>();
 // Better for performance to have one set of meshes for all flowerbeds
@@ -11,10 +11,10 @@ function instantiateFlowerMeshes(scene: Scene) {
   flowerTypes.push(generateFlower(scene, Color3.FromHexString(COLORS.RED)));
 }
 
-export function placeFlowerBedsOnGround(scene: Scene, heightMap: Array<Array<number>>): Array<InstancedMesh> {
+export function placeFlowerBedsOnGround(scene: Scene, amount: number, heightMap: Array<Array<number>>): Array<InstancedMesh> {
   const flowers = new Array<InstancedMesh>();
   const max = heightMap.length;
-  for(let i = 0; i < 200; i++) {
+  for(let i = 0; i < amount; i++) {
     const bedPos = new Vector3(
       Math.floor(Math.random() * max),
       0,
@@ -44,9 +44,10 @@ export function generateFlowerBed(scene: Scene, pOff: Vector3): Array<InstancedM
     const fti = Math.floor(Math.random() * flowerTypes.length);
     const fi = flowerTypes[fti].createInstance("Flower" + i);
     scene.addMesh(fi);
+    // TODO: Do this with random radius and arc
     fi.position = pOff.add(new Vector3(
       half - Math.random() * areaSize,
-      0,
+      Math.random() * -.3,
       half - Math.random() * areaSize,
     ));
     fi.rotation = new Vector3(
@@ -62,9 +63,6 @@ export function generateFlowerBed(scene: Scene, pOff: Vector3): Array<InstancedM
 
 export function generateFlower(scene: Scene, petalColor: Color3): Mesh {
   const stemColor = Color3.FromHexString(COLORS.LIGHT_GREEN);
-  // ffaeb6 pinkish
-  // f47e1b orange-ish
-  // Reddish e6482e
 
   const md = {
     vertices: new Array<Vector3>(),

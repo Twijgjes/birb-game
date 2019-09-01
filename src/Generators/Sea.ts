@@ -1,6 +1,6 @@
 import { Scene, Mesh, VertexBuffer, StandardMaterial, Color3, VertexData, FloatArray, IndicesArray, Vector3 } from "babylonjs";
-import { COLORS } from "./Constants/colors";
-import { Updateable } from "./Utils/Updateable";
+import { COLORS } from "../Constants/colors";
+import { Updateable } from "../Utils/Updateable";
 
 export function makeSea(scene: Scene, size: number, center: Vector3) {
   const waterMesh = Mesh.CreateGround("ground", size, size, 16, scene, true);

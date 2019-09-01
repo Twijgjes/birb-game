@@ -1,4 +1,4 @@
-import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, StandardMaterial, InstancedMesh, Material, VertexBuffer, Quaternion } from "babylonjs";
+import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, Material, VertexBuffer, Quaternion } from "babylonjs";
 import { COLORS } from "../Constants/colors";
 
 export interface MeshData {
@@ -42,7 +42,12 @@ export function addRandomRotation(v: Vector3, range: number): Vector3 {
   return result;
 }
 
-export function prepMesh(oldMesh: Mesh, meshColor: Color3, material: Material, disposeOldMesh: boolean = true): Mesh {
+export function prepMesh(
+  oldMesh: Mesh, 
+  meshColor: Color3, 
+  material: Material, 
+  disposeOldMesh: boolean = true
+): Mesh {
   const mesh: Mesh = new Mesh(oldMesh.name);
   mesh.position = oldMesh.position;
   mesh.rotation = oldMesh.rotation;

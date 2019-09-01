@@ -1,12 +1,20 @@
 import * as dat from 'dat.gui';
 
-export function initChooseSceneUI() {
-  const gui = new dat.GUI();
+export function initUI() {
+  return new dat.GUI();
+}
+
+export function initChooseSceneUI(gui: dat.GUI) {
   const csF = gui.addFolder("Choose a scene");
   const chooseSceneMenu = {
     demo: function() {
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set("scene", "demo");
+      window.location.search = urlParams.toString();
+    },
+    sandbox: function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set("scene", "sandbox");
       window.location.search = urlParams.toString();
     },
     zen: function() {
@@ -16,10 +24,13 @@ export function initChooseSceneUI() {
     },
   };
   csF.add(chooseSceneMenu, 'demo');
+  csF.add(chooseSceneMenu, 'sandbox');
   csF.add(chooseSceneMenu, 'zen');
+}
 
+export function initUtilityButtons(gui: dat.GUI) {
   const mainButtons = {
-    fullscreen: function() {
+    "switch fullscreen": function() {
       if (!document.fullscreen) {
         document.body.requestFullscreen();
       } else {
@@ -39,6 +50,6 @@ export function initChooseSceneUI() {
       );
     }
   }
-  gui.add(mainButtons, "fullscreen");
+  gui.add(mainButtons, "switch fullscreen");
   gui.add(mainButtons, "info");
 }

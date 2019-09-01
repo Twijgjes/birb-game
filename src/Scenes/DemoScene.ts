@@ -1,11 +1,11 @@
 import { Scene, Engine, Vector3 } from "babylonjs";
 import { setupEnvironment } from "../Environment";
-import { generateHeightMap, generateTerrainMesh } from "../TerrainGenerator";
-import { placeFlowerBedsOnGround, generateFlowerBed } from "../FloraGenerator";
-import { generateTreesInRadius } from "../TreeGenerator";
-import { generateBushesInRadius } from "../BushGenerator";
-import { generateButterflies } from "../ButterflyGenerator";
-import { makeSea } from "../Sea";
+import { generateHeightMap, generateTerrainMesh } from "../Generators/TerrainGenerator";
+import { placeFlowerBedsOnGround, generateFlowerBed } from "../Generators/FloraGenerator";
+import { generateTreesInRadius } from "../Generators/TreeGenerator";
+import { generateBushesInRadius } from "../Generators/BushGenerator";
+import { generateButterflies } from "../Generators/ButterflyGenerator";
+import { makeSea } from "../Generators/Sea";
 import setupCameraAndControls from "../Interaction/Camera";
 import Game from '../Game';
 
@@ -22,7 +22,7 @@ export default function setupDemoScene () {
     const center = new Vector3(64, 0, 64);
 
     console.info("Flowers");
-    placeFlowerBedsOnGround(scene, heightMap);
+    placeFlowerBedsOnGround(scene, 200, heightMap);
     generateFlowerBed(scene, Vector3.Zero());
     console.info("Trees");
     generateTreesInRadius(scene, center, 50, 25, heightMap);
