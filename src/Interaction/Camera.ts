@@ -20,6 +20,7 @@ export default function setupCameraAndControls(
       .repeat(Infinity)
       .easing((TWEEN as any).Easing.Linear.None)
       .start();
+    camera.attachControl(canvas, true);
   } else {
     // Create a FreeCamera, and set its position to {x: 0, y: 5, z: -10}
     camera = new BABYLON.FreeCamera('camera1', startPosition, scene);

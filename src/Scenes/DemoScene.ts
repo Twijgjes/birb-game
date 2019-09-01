@@ -13,6 +13,11 @@ import Game from '../Game';
 export default function setupDemoScene () {
     const { scene, engine, canvas } = Game;
     setupEnvironment(scene, engine);
+    // Camera and controls setup
+    // For normal use
+    // setupCameraAndControls(canvas, scene, engine, new Vector3(50, 5, 50));
+    // For dev
+    setupCameraAndControls(canvas, scene, engine, new Vector3(0, 5, -10));
 
     const size = 128;
     const heightMap = generateHeightMap(size);
@@ -32,10 +37,4 @@ export default function setupDemoScene () {
     generateButterflies(scene, 100, center, 40);
     console.info("Sea");
     makeSea(scene, size * 1.5, center.add(new Vector3(0, .5, 0)));
-
-    // Camera and controls setup
-    // For normal use
-    // setupCameraAndControls(canvas, scene, engine, new Vector3(50, 5, 50));
-    // For dev
-    setupCameraAndControls(canvas, scene, engine, new Vector3(0, 5, -10));
 }

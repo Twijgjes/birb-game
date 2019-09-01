@@ -88,6 +88,11 @@ interface WorldOptions {
 function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement, options: WorldOptions) {
   // Setup
   setupEnvironment(scene, engine);
+  // Camera and controls setup
+  // For normal use
+  setupCameraAndControls(canvas, scene, engine, new Vector3(50, 5, 50));
+  // For dev
+  // setupCameraAndControls(canvas, scene, engine, new Vector3(0, 5, -10));
 
   const heightMap = generateHeightMap(options.size);
   const terrain = generateTerrainMesh(scene, options.size, heightMap);
@@ -124,10 +129,6 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
   console.info("Sea");
   makeSea(scene, options.size * 1.5, vCenter.add(new Vector3(0, .5, 0)));
 
-  // Camera and controls setup
-  // For normal use
-  setupCameraAndControls(canvas, scene, engine, new Vector3(50, 5, 50));
-  // For dev
-  // setupCameraAndControls(canvas, scene, engine, new Vector3(0, 5, -10));
+  
 }
     
