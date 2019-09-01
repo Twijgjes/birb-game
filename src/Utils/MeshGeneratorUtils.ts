@@ -1,5 +1,6 @@
-import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, Material, VertexBuffer, Quaternion } from "babylonjs";
+import { Mesh, Scene, Vector3, Color3, FloatArray, VertexData, Material, VertexBuffer, Quaternion, StandardMaterial } from "babylonjs";
 import { COLORS } from "../Constants/colors";
+import Game from "../Game";
 
 export interface MeshData {
   vertices: Array<Vector3>;
@@ -38,6 +39,17 @@ export function addRandomRotation(v: Vector3, range: number): Vector3 {
     half - Math.random() * range,
     half - Math.random() * range,
     half - Math.random() * range
+  ), result);
+  return result;
+}
+
+export function addRandomYRotation(v: Vector3, range: number): Vector3 {
+  const result = new Vector3();
+  const half = range / 2;
+  v.clone().rotateByQuaternionToRef(Quaternion.FromEulerAngles(
+    0,
+    half - Math.random() * range,
+    0
   ), result);
   return result;
 }
@@ -87,4 +99,50 @@ export function prepMesh(
     oldMesh.dispose();
   }
   return mesh;
+}
+
+export function simplePrepMesh(
+  mesh: Mesh,
+  meshColor: Color3,
+  material?: StandardMaterial,
+) {
+  mesh.convertToFlatShadedMesh();
+  mesh.useVertexColors = true;
+  mesh.receiveShadows = true;
+
+  if (!material) {
+    const { scene } = Game;
+    material = new StandardMaterial("vertexColorMaterial", scene);
+    material.diffuseColor = Color3.White();
+    material.specularColor = Color3.Black();
+    material.backFaceCulling = false;
+  }
+
+  mesh.material = material;
+
+  const positions = [...mesh.getVerticesData(VertexBuffer.PositionKind)];
+  const colors = Array<number>();
+
+  const numOfColors = positions.length / 3;
+  for (let i = 0; i < numOfColors; i ++) {
+    colors.push(meshColor.r, meshColor.g, meshColor.b, 1);
+  }
+  mesh.setVerticesData(VertexBuffer.ColorKind, colors);
+
+}
+
+export const square = [
+  new Vector3(.5,0,0),
+  new Vector3(0,-.5,0),
+  new Vector3(-.5,0,0),
+  new Vector3(0,.5,0),
+];
+square.push(square[0]); // Gotta end somewhere
+
+const start = new Vector3(.5,0,0);
+export const hexagon = [start];
+for(let i = 0; i < 6; i++) {
+  hexagon.push(
+    hexagon[i].rotateByQuaternionToRef(Quaternion.FromEulerAngles(0,0,Math.PI / 3), new Vector3())
+  );
 }

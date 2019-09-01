@@ -1,6 +1,6 @@
 import { Scene, Vector3, Color3, VertexData, Mesh, VertexBuffer, StandardMaterial, TransformNode, Quaternion } from "babylonjs";
 import { flattenVertices, addFace } from "../Utils/MeshGeneratorUtils";
-import { COLORS, randomBrightColor } from "../Constants/colors";
+import { randomBrightColor } from "../Constants/colors";
 import TWEEN from '@tweenjs/tween.js';
 
 export function generateButterflies(scene: Scene, amount: number, center: Vector3, distance: number) {
@@ -95,14 +95,26 @@ function createWing(scene: Scene, wingColor: Color3, mirror = false): Mesh {
   return mesh;
 }
 
-function flyTo(node: TransformNode, fromVelocity?: Vector3) {
+export function flyTo(
+  node: TransformNode, 
+  options?: {
+    fromVelocity?: Vector3,
+    speed?: number,
+  }
+) {
+  let { speed, fromVelocity } = options ? options : {
+    speed: .01,
+    fromVelocity: undefined,
+  };
+
   if (!fromVelocity) {
     fromVelocity = new Vector3(
       Math.random() - .5,
-      (Math.random() - .5) * .1, 
+      (Math.random() - .5) * .01, 
       Math.random() - .5
-    ).normalize().scale(.01);
+    ).normalize().scale(speed);
   }
+
   const toVelocity = new Vector3();
   fromVelocity.clone().rotateByQuaternionToRef(Quaternion.FromEulerAngles(
     0,
@@ -119,6 +131,7 @@ function flyTo(node: TransformNode, fromVelocity?: Vector3) {
     .easing((TWEEN as any).Easing.Linear.None)
     .start()
     .onComplete(() => {
-      flyTo(node, toVelocity);
+      // TODO: Add counter (or measure distance and set max) and have them fly back to the center every once in a while
+      flyTo(node, { fromVelocity: toVelocity, speed });
     });
 }

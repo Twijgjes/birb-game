@@ -5,6 +5,7 @@ import { placeFlowerBedsOnGround, generateFlowerBed } from "../Generators/FloraG
 import { generateTreesInRadius } from "../Generators/TreeGenerator";
 import { generateBushesInRadius } from "../Generators/BushGenerator";
 import { generateButterflies } from "../Generators/ButterflyGenerator";
+import { generateBird, generateAutonomousBird, generateAutonomousBirds } from "../Generators/BirdGenerator";
 import { makeSea } from "../Generators/Sea";
 import setupCameraAndControls from "../Interaction/Camera";
 import Game from '../Game';
@@ -26,9 +27,13 @@ export default function setupDemoScene () {
     // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
     const center = new Vector3(64, 0, 64);
 
+    console.info("Bird!");
+    // generateBird(scene, new Vector3(0, 1, 0));
+    // generateAutonomousBird(scene, new Vector3(0, 1, 0));
+    generateAutonomousBirds(scene, 100, center.add(new Vector3(0, 5, 0)), 40);
+
     console.info("Flowers");
     placeFlowerBedsOnGround(scene, 200, heightMap);
-    generateFlowerBed(scene, Vector3.Zero());
     console.info("Trees");
     generateTreesInRadius(scene, center, 50, 25, heightMap);
     console.info("Bushes");

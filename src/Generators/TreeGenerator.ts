@@ -1,6 +1,6 @@
 import { Scene, Vector3, Color3, StandardMaterial, Mesh, MeshBuilder, Quaternion } from "babylonjs";
 import { COLORS } from "../Constants/colors";
-import { prepMesh, addRandomRotation } from "../Utils/MeshGeneratorUtils";
+import { prepMesh, addRandomRotation, hexagon } from "../Utils/MeshGeneratorUtils";
 import { Shadows } from "../Environment";
 
 interface TreeData {
@@ -180,20 +180,4 @@ export function generateBranch(
     indices,
   };  
   return branchEndData;
-}
-
-const square = [
-  new Vector3(.5,0,0),
-  new Vector3(0,-.5,0),
-  new Vector3(-.5,0,0),
-  new Vector3(0,.5,0),
-];
-square.push(square[0]); // Gotta end somewhere
-
-const start = new Vector3(.5,0,0);
-const hexagon = [start];
-for(let i = 0; i < 6; i++) {
-  hexagon.push(
-    hexagon[i].rotateByQuaternionToRef(Quaternion.FromEulerAngles(0,0,Math.PI / 3), new Vector3())
-  );
 }

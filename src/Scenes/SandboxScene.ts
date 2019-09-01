@@ -10,6 +10,7 @@ import { makeSea } from "../Generators/Sea";
 import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
 import Game from "../Game";
+import { generateAutonomousBirds } from "../Generators/BirdGenerator";
 
 export default function setupSandboxScene(gui: dat.GUI) {
   const { scene, engine, canvas } = Game;
@@ -32,7 +33,11 @@ export default function setupSandboxScene(gui: dat.GUI) {
     },
     flowersbeds: {
       amount: 100,
-    }
+    },
+    birds: {
+      amount: 50,
+      radius: 60,
+    },
   };
   setupOptionsUI(gui, worldOptions);
   regenerateWorld(scene, engine, canvas, worldOptions);
@@ -59,6 +64,10 @@ function setupOptionsUI(gui: dat.GUI, wo: WorldOptions) {
 
   const flowerbedsFolder = optionsFolder.addFolder("flowerbeds");
   flowerbedsFolder.add(wo.flowersbeds, "amount", 1, 500).onFinishChange(saveWO);
+
+  const birdsFolder = optionsFolder.addFolder("birds");
+  birdsFolder.add(wo.birds, "amount", 0, 200).onFinishChange(saveWO);
+  birdsFolder.add(wo.birds, "radius", 5, 256).onFinishChange(saveWO);
 }
 
 function saveWorldOptions(worldOptions: WorldOptions) {
@@ -82,6 +91,10 @@ interface WorldOptions {
   },
   flowersbeds: {
     amount: number;
+  },
+  birds: {
+    amount: number;
+    radius: number;
   }
 }
 
@@ -99,6 +112,11 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
   terrain.receiveShadows = true;
   const vCenter = new Vector3(options.center, 0, options.center);
   // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
+
+  console.info("Bird!");
+  // generateBird(scene, new Vector3(0, 1, 0));
+  // generateAutonomousBird(scene, new Vector3(0, 1, 0));
+  generateAutonomousBirds(scene, 100, vCenter.add(new Vector3(0, 5, 0)), 40);
 
   console.info("Flowers");
   placeFlowerBedsOnGround(scene, options.flowersbeds.amount, heightMap);
