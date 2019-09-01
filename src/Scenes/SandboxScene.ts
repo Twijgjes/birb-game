@@ -114,9 +114,7 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
   // const terrainMeshes = generateTerrainTiles(scene, 64, 16);
 
   console.info("Bird!");
-  // generateBird(scene, new Vector3(0, 1, 0));
-  // generateAutonomousBird(scene, new Vector3(0, 1, 0));
-  generateAutonomousBirds(scene, 100, vCenter.add(new Vector3(0, 5, 0)), 40);
+  generateAutonomousBirds(scene, options.birds.amount, vCenter.add(new Vector3(0, 5, 0)), options.birds.radius);
 
   console.info("Flowers");
   placeFlowerBedsOnGround(scene, options.flowersbeds.amount, heightMap);
