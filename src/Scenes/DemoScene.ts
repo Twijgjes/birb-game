@@ -7,6 +7,7 @@ import { generateBushesInRadius } from "../Generators/BushGenerator";
 import { generateButterflies } from "../Generators/ButterflyGenerator";
 import { generateBird, generateAutonomousBird, generateAutonomousBirds } from "../Generators/BirdGenerator";
 import { makeSea } from "../Generators/Sea";
+import { generateRock, generateRowOfRocks, generateRocksInRadius } from "../Generators/RockGenerator";
 import setupCameraAndControls from "../Interaction/Camera";
 import Game from '../Game';
 
@@ -42,4 +43,7 @@ export default function setupDemoScene () {
     generateButterflies(scene, 100, center, 40);
     console.info("Sea");
     makeSea(scene, size * 1.5, center.add(new Vector3(0, .5, 0)));
+    console.info("Rock");
+    generateRocksInRadius(scene, center, 60, 50, heightMap);
+
 }

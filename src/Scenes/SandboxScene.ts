@@ -11,6 +11,7 @@ import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
 import Game from "../Game";
 import { generateAutonomousBirds } from "../Generators/BirdGenerator";
+import { generateRocksInRadius } from "../Generators/RockGenerator";
 
 export default function setupSandboxScene(gui: dat.GUI) {
   const { scene, engine, canvas } = Game;
@@ -37,6 +38,10 @@ export default function setupSandboxScene(gui: dat.GUI) {
     birds: {
       amount: 50,
       radius: 60,
+    },
+    rocks: {
+      amount: 25,
+      radius: 50,
     },
   };
   setupOptionsUI(gui, worldOptions);
@@ -68,6 +73,10 @@ function setupOptionsUI(gui: dat.GUI, wo: WorldOptions) {
   const birdsFolder = optionsFolder.addFolder("birds");
   birdsFolder.add(wo.birds, "amount", 0, 200).onFinishChange(saveWO);
   birdsFolder.add(wo.birds, "radius", 5, 256).onFinishChange(saveWO);
+
+  const rocksFolder = optionsFolder.addFolder("rocks");
+  rocksFolder.add(wo.rocks, "amount", 0, 100).onFinishChange(saveWO);
+  rocksFolder.add(wo.rocks, "radius", 5, 256).onFinishChange(saveWO);
 }
 
 function saveWorldOptions(worldOptions: WorldOptions) {
@@ -93,6 +102,10 @@ interface WorldOptions {
     amount: number;
   },
   birds: {
+    amount: number;
+    radius: number;
+  },
+  rocks: {
     amount: number;
     radius: number;
   }
@@ -141,10 +154,16 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
     vCenter, 
     options.butterflies.radius
   );
+
+  console.info("Rocks");
+  generateRocksInRadius(scene, 
+    vCenter, 
+    options.rocks.radius, 
+    options.rocks.amount, 
+    heightMap
+  );
   
   console.info("Sea");
-  makeSea(scene, options.size * 1.5, vCenter.add(new Vector3(0, .5, 0)));
-
-  
+  makeSea(scene, options.size * 1.5, vCenter.add(new Vector3(0, .5, 0)));  
 }
     

@@ -11,6 +11,7 @@ import setupCameraAndControls from "../Interaction/Camera";
 import { Scene, Engine, Vector3 } from "babylonjs";
 import Game from "../Game";
 import { generateAutonomousBirds } from "../Generators/BirdGenerator";
+import { generateRocksInRadius } from "../Generators/RockGenerator";
 
 export default function setupZenScene(gui: dat.GUI) {
   const { scene, engine, canvas } = Game;
@@ -37,6 +38,10 @@ export default function setupZenScene(gui: dat.GUI) {
       amount: 8,
       radius: 10,
     },
+    rocks: {
+      amount: 1,
+      radius: 3,
+    },
   };
   // setupOptionsUI(gui, worldOptions);
   regenerateWorld(scene, engine, canvas, worldOptions);
@@ -61,6 +66,10 @@ interface WorldOptions {
     amount: number;
   },
   birds: {
+    amount: number;
+    radius: number;
+  },
+  rocks: {
     amount: number;
     radius: number;
   }
@@ -110,6 +119,14 @@ function regenerateWorld(scene: Scene, engine: Engine, canvas: HTMLCanvasElement
     options.butterflies.amount, 
     vCenter, 
     options.butterflies.radius
+  );
+
+  console.info("Rocks");
+  generateRocksInRadius(scene, 
+    vCenter,
+    options.rocks.radius,
+    options.rocks.amount, 
+    heightMap,
   );
   
   console.info("Sea");
